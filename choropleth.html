@@ -1,0 +1,96 @@
+<html>
+<head>
+  <title>A D3 map</title>
+  <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+  <script src="neighborhoods.js"></script>
+  <script src="rodents.js"></script>
+  <script src="moreRodents.js"></script>
+  <style>
+    path.map {
+      fill: indianred;
+    }
+
+    .yellow {
+      fill: yellow;
+    }
+  </style>
+</head>
+<body>
+  <script>
+
+  // Define dimensions
+var width = 700,
+    height = 580;
+
+// Define color scale function
+var color = d3.scaleLinear()
+    .range(["hsl(62,100%,90%)", "hsl(228,30%,20%)"])
+    .interpolate(d3.interpolateHcl);
+
+// Attach svg to page
+var svg = d3.select( "body" )
+  .append( "svg" )
+  .attr( "width", width )
+  .attr( "height", height );
+
+// Attach group to svg
+var g = svg.append( "g" );
+
+// Define a projection function
+var albersProjection = d3.geoAlbers()
+  .scale( 190000 )
+  .rotate( [71.057,0] )
+  .center( [0, 42.313] )
+  // .fitSize([960, 960], iljson)
+  .translate( [width/2,height/2] );
+
+// Define a path element, passing in a projection
+var geoPath = d3.geoPath()
+    .projection( albersProjection )
+    .pointRadius(3);
+
+// const densities = neighborhoods_json.features.map(neighborhood => neighborhood.properties.density)
+//   .sort(function(a, b) { return a - b; })
+const densities = more_rodents.features
+  .map(feature => feature.properties.ratcount)
+  .sort((a,b) => { return a-b })
+
+// Continue to define color function passing in data to define bounds
+color.domain([d3.quantile(densities, .01), d3.quantile(densities, .99)]);
+
+// console.log('densities', color(neighborhoods_json.features[10].properties.density))
+
+// Create a path element representing geoJSON data, defining data-based fill
+g.selectAll( "path" )
+  .data( neighborhoods_json.features )
+  .enter()
+  .append( "path" )
+  .attr('class', 'map')
+  .style('fill', d => color(d.properties.density))
+  .attr( "d", geoPath )
+
+const rodents = svg.append('g')
+
+rodents.selectAll('path')
+  .data(rodents_json.features)
+  .enter()
+  .append('path')
+  .attr('fill', '#000')
+  .attr('stroke', '#999')
+  .attr('d', geoPath)
+  .on('click', function() {
+
+    this.style.opacity = 0
+  })
+
+// Create circle elements using rodent geoJson data and projection function to place dots
+// rodents.selectAll('circle')
+//   .data(more_rodents.features)
+//   .enter().append('circle')
+//     .attr('cx', d => `${albersProjection(d.geometry.coordinates)[0]}`)
+//     .attr('cy', d => `${albersProjection(d.geometry.coordinates)[1]}`)
+//     .attr('r', d => d.properties.ratcount)
+//     .attr('fill', 'indianred')
+  </script>
+</body>
+</html>
