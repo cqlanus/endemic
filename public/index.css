@@ -1,7 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+body {
+  margin-bottom: 100px;
+  font-family: 'Raleway'
+}
+
+.canvas {
+  border: 1px dashed black;
+  margin-left: 100px;
+  margin-top: 20px;
+}
+
 .bar {
   fill: steelblue;
 }
 
 .bar:hover {
   fill: indianred;
+}
+
+.form-flex {
+  display: flex;
+  justify-content: space-around;
+}
+
+.point:hover {
+  fill: yellow;
+  opacity: 1;
+}
+
+.active {
+  fill: yellow;
+  opacity: 1;
 }
