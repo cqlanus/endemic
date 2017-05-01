@@ -25,6 +25,38 @@ const migrationScatter = (options) => {
   var g = svg.append( "g" )
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
+  var x = d3.scaleLinear()
+    .domain([0, 30])
+    .rangeRound([700, 930])
+
+  const legend = svg.append('g')
+    .attr("class", "key")
+    .attr("transform", "translate(0,"+(30)+")")
+
+  legend.selectAll('rect')
+    .data(color.domain())
+    .enter().append('rect')
+    .attr("height", 8)
+    .attr("x", function(d) {
+      return x(d); })
+    .attr("width", (d, i) => (i) ? x(d) - x(color.domain()[i-1]) : 31)
+    .attr("fill", function(d) { return color(d); })
+
+    legend.append("text")
+      .attr("class", "caption")
+      .attr("x", x.range()[0])
+      .attr("y", -6)
+      .attr("fill", "#000")
+      .attr("text-anchor", "start")
+      .attr("font-weight", "bold")
+      .text("Days ago");
+
+    legend.call(d3.axisBottom(x)
+        .tickSize(13)
+        .tickValues(color.domain()))
+      .select(".domain")
+        .remove();
+
   const normalName = normalizeName(options.bird)
 
   /* Get eBird data */
@@ -88,6 +120,26 @@ const migrationScatter = (options) => {
       .attr('class', 'axis x')
       .call(xaxis)
       .attr('transform', `translate(0, ${height})`)
+
+    const divTooltip = d3.select("body").append("div").attr("class", "toolTip")
+      g.on("mousemove", function(d){
+        divTooltip.style("left", d3.event.pageX+10+"px");
+        divTooltip.style("top", d3.event.pageY-25+"px");
+        divTooltip.style("display", "inline-block");
+        var x = d3.event.pageX, y = d3.event.pageY
+        var elements = document.querySelectorAll(':hover');
+        var l = elements.length
+        l = l-1
+        var elementData = elements[l].__data__
+        divTooltip.html(`
+          ${elementData.howMany} ${elementData.howMany > 1 ? 'birds' : 'bird'} <br>
+          ${elementData.daysAgo} ${elementData.daysAgo > 1 ? 'days' : 'day'} ago
+
+        `);
+        });
+      g.on("mouseout", function(d){
+        divTooltip.style("display", "none");
+        })
   })
 }
 

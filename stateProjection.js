@@ -4,6 +4,7 @@ const wijson = require('./data/wi-county.json')
 const txjson = require('./data/tx-county.json')
 const msjson = require('./data/ms-county.json')
 const cajson = require('./data/ca-county.json')
+const usjson = require('./data/us-states.json')
 const taxa_obj = require('./data/taxa_obj.js')
 const state_lngs = require('./data/state_lngs.json')
 const d3color = require('d3-scale-chromatic')
@@ -37,6 +38,11 @@ const stateDistributionChart = options => {
     case 'CA':
       statejson = cajson
       rotation = state_lngs['CA']
+      break
+
+    case 'US':
+      statejson = usjson
+      rotation = 95
       break
 
     default:
@@ -98,7 +104,8 @@ const stateDistributionChart = options => {
     }))
     .enter().append('rect')
     .attr("height", 8)
-    .attr("x", function(d) { return x(d[0]); })
+    .attr("x", function(d) {
+      return x(d[0]); })
     .attr("width", function(d) { return x(d[1]) - x(d[0]); })
     .attr("fill", function(d) { return color(d[0]); })
 
@@ -164,7 +171,7 @@ const stateDistributionChart = options => {
   const speciesName = normalizeName(options.species)
 
   /* Get eBird data */
-  d3.json(`http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=500&locale=en_US&fmt=json&includeProvisional=true`)
+  d3.json(buildQuery(options, speciesName))
     .get((err, data) => {
       if (!data.length) {
         alert(`No ${options.species} found in this area!`)
@@ -197,6 +204,27 @@ const stateDistributionChart = options => {
         .attr('cx', d => albersProj(d.geometry.coordinates)[0])
         .attr('cy', d => albersProj(d.geometry.coordinates)[1])
         .attr('r', radius)
+
+
+      const divTooltip = d3.select("body").append("div").attr("class", "toolTip")
+      sightings.on("mousemove", function(d){
+        divTooltip.style("left", d3.event.pageX+10+"px");
+        divTooltip.style("top", d3.event.pageY-25+"px");
+        divTooltip.style("display", "inline-block");
+        var x = d3.event.pageX, y = d3.event.pageY
+        var elements = document.querySelectorAll(':hover');
+        var l = elements.length
+        l = l-1
+        var elementData = elements[l].__data__
+        divTooltip.html(`
+          ${elementData.count} ${elementData.count > 1 ? 'birds' : 'bird'} <br>
+          ${elementData.daysAgo} ${elementData.daysAgo > 1 ? 'days' : 'day'} ago
+
+        `);
+        });
+      sightings.on("mouseout", function(d){
+        divTooltip.style("display", "none");
+        })
     })
 }
 
@@ -213,6 +241,14 @@ const normalizeName = commonName => {
 
 const milliToDays = ms => {
   return Math.floor(ms/(1000*60*60*24))
+}
+
+const buildQuery = (options, speciesName) => {
+  if (options.state === 'US') {
+    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${speciesName}&back=15&maxResults=500&locale=en_US&fmt=json&includeProvisional=true`
+  } else {
+    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=500&locale=en_US&fmt=json&includeProvisional=true`
+  }
 }
 
 export default stateDistributionChart

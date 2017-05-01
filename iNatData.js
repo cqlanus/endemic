@@ -33,10 +33,9 @@ const startTree = () => ({
 })
 
 const iNaturalistTreemap = options => {
-  const height = 700, width = 1200
+  const height = 800, width = 1200
   const margin = {top: 50, bottom: 0, left: 50, right: 50}
 
-  console.log('am i removing?')
   d3.selectAll('svg').remove()
 
   const color = d3.scaleOrdinal().range(d3color.schemeSet3)
@@ -47,7 +46,6 @@ const iNaturalistTreemap = options => {
     .attr( "width", width )
     .attr( "height", height )
 
-  console.log('query', buildQuery(options))
   d3.json(buildQuery(options))
   .get((err, data) => {
     if (!data.results.length) {
@@ -59,47 +57,79 @@ const iNaturalistTreemap = options => {
 
 
     const treemap = d3.treemap()
-      .size([width - 2, height])
+      .size([width - 2, height-50])
+      .padding(2)
       .round(true)
 
     const treeRoot = d3.hierarchy(builtTree, d => d.children)
       .sum(d => d.taxon ? d.taxon.observations_count : 0)
 
     const d3Tree = treemap(treeRoot)
+    // console.log(d3Tree)
 
     const leaves = d3Tree.leaves().filter(leaf => {
       return leaf.data.taxon
     })
-    // console.log(leaves)
+
     var cells = svg.selectAll(".cell")
       .data(leaves)
       .enter().append("g")
         .attr("class","cell")
         .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; });
 
+    const colors = {}
+
     cells.append("rect")
         .attr("width", function(d) { return d.x1 - d.x0; })
         .attr("height", function(d) { return d.y1 - d.y0; })
-        .attr("fill", function(d) { return color(d.parent.data.name); })
+        .attr("fill", function(d) {
+          let cellColor = color(d.parent.data.name)
+          if (!colors[cellColor]) { colors[d.parent.data.name] = cellColor }
+          return cellColor;
+        })
+        .attr('stroke', 'white')
+
+      const legend = svg.selectAll('.legend')
+        .data(Object.keys(colors))
+        .enter().append('g')
+        .attr('class', 'legend')
+        // .attr("transform", (d, i) => "translate(0,"+ i * 20 +")" )
+
+      legend.append('rect')
+        .attr('x', (d, i) => {
+          return ((width/Object.keys(colors).length) * i+1) + 10
+        })
+        .attr('y', d => height - 40)
+        .attr('width', 18)
+        .attr('height', 18)
+        .attr('fill', d => colors[d])
         .attr('stroke', 'black')
 
-    cells.append('text')
-        .attr("x", 10)
-        .attr("y", function(d, i) { return (d.y1 - d.y0)/2; })
-        .text((d, i) => {
-          const name = d.data.taxon ? d.data.taxon.preferred_common_name : null
-          return d.children ? null : name
+      legend.append('text')
+        .attr('x', (d, i) => {
+          return ((width/Object.keys(colors).length) * i+1) + 40
         })
-        .attr('fill', 'black')
+        .attr('y', d => height - 30)
+        .text(d => d)
 
-      cells.append('text')
-        .attr("x", 10)
-        .attr("y", function(d, i) { return (d.y1 - d.y0)/2 + 15; })
-        .text((d, i) => {
-          const count = d.data.taxon ? d.data.count : null
-          return d.children ? null : `${count} sightings`
+      const divTooltip = d3.select("body").append("div").attr("class", "toolTip")
+      cells
+        .on("mousemove", function(d){
+            divTooltip.style("left", d3.event.pageX+10+"px");
+            divTooltip.style("top", d3.event.pageY-25+"px");
+            divTooltip.style("display", "inline-block");
+            var x = d3.event.pageX, y = d3.event.pageY
+            var elements = document.querySelectorAll(':hover');
+            var l = elements.length
+            l = l-1
+            var elementData = elements[l].__data__
+            // console.log(elementData)
+            divTooltip.html( elementData.data.taxon.preferred_common_name + "<br>" + elementData.data.taxon.observations_count + ' sightings');
+        });
+      cells
+        .on("mouseout", function(d){
+            divTooltip.style("display", "none");
         })
-        .attr('fill', 'black')
   })
 }
 

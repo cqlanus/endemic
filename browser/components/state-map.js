@@ -49,6 +49,7 @@ class StateMap extends React.Component {
                 <option value='TX'>TX</option>
                 <option value='MS'>MS</option>
                 <option value='CA'>CA</option>
+                <option value='US'>All US</option>
               </select>
             </div>
           </div>
