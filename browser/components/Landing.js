@@ -6,8 +6,9 @@ import NavBar from './NavBar'
 const Landing = props => (
   // <div className="container">
     <div className="jumbotron text-center">
-      <h1 className="">biomaps</h1>
-      <p className="">This is a description of this small application</p>
+      <h1 className="">endemic</h1>
+      <p className="">endemic uses the eBird and iNaturalist APIs to visualize biodiversity with d3.</p>
+      <p className="">explore and watch as data comes to <strong>life.</strong></p>
       <Link className="btn btn-default btn-lg" to="/scatter">
         Scatterplot
       </Link>

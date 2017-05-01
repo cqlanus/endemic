@@ -25,7 +25,6 @@ class StateMap extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    console.log(this.state)
     stateProjection(this.state)
   }
 

@@ -5,7 +5,7 @@ const NavBar = () => (
   <nav className="navbar navbar-default">
       <div className="container">
           <div className="navbar-header">
-              <Link className="navbar-brand" to="/home">biomaps</Link>
+              <Link className="navbar-brand" to="/home">endemic</Link>
           </div>
 
           <div className="navbar-collapse">

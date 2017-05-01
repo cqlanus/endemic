@@ -165,7 +165,6 @@ const buildQuery = (options) => {
       }
     }
   })
-
   return query
 
 }
