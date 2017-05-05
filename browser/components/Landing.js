@@ -8,7 +8,7 @@ const Landing = props => (
     <div className="jumbotron text-center">
       <h1 className="">endemic</h1>
       <p className="">endemic uses the eBird and iNaturalist APIs to visualize biodiversity with d3.</p>
-      <p className="">explore and watch as data comes to <strong>life.</strong></p>
+      <p className="">explore how data can come to <strong>life.</strong></p>
       <Link className="btn btn-default btn-lg" to="/scatter">
         Scatterplot
       </Link>

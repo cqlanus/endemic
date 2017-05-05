@@ -4,6 +4,7 @@ const wijson = require('./data/wi-county.json')
 const txjson = require('./data/tx-county.json')
 const msjson = require('./data/ms-county.json')
 const cajson = require('./data/ca-county.json')
+const nyjson = require('./data/ny-county.json')
 const usjson = require('./data/us-states.json')
 const taxa_obj = require('./data/taxa_obj.js')
 const state_lngs = require('./data/state_lngs.json')
@@ -38,6 +39,11 @@ const stateDistributionChart = options => {
     case 'CA':
       statejson = cajson
       rotation = state_lngs['CA']
+      break
+
+    case 'NY':
+      statejson = nyjson
+      rotation = state_lngs['NY']
       break
 
     case 'US':
@@ -245,9 +251,9 @@ const milliToDays = ms => {
 
 const buildQuery = (options, speciesName) => {
   if (options.state === 'US') {
-    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${speciesName}&back=15&maxResults=500&locale=en_US&fmt=json&includeProvisional=true`
+    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
   } else {
-    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=500&locale=en_US&fmt=json&includeProvisional=true`
+    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
   }
 }
 

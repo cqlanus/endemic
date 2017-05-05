@@ -6,6 +6,7 @@ import {connect, Provider} from 'react-redux'
 import MigrationScatter from './components/migration-scatter'
 import StateMap from './components/state-map'
 import INaturalist from './components/inaturalist'
+import Sunburst from './components/Sunburst'
 import Home from './components/home'
 import Landing from './components/landing'
 const d3 = require('d3')
@@ -22,6 +23,7 @@ render(<Router history={hashHistory}>
           <Route path="/scatter" component={MigrationScatter} onEnter={onEnter} />
           <Route path="/state" component={StateMap} onEnter={onEnter} />
           <Route path="/inaturalist" component={INaturalist} onEnter={onEnter} />
+          <Route path="/sunburst" component={Sunburst} onEnter={onEnter} />
         </Route>
        </Router>
        , document.getElementById('app'))

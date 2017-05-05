@@ -1,5 +1,6 @@
 import React from 'react'
 import iNaturalistTreemap from '../../iNatData'
+import iNatSunburstFn from '../../iNatSunburst'
 import ebird_arr from '../../data/ebird-simple.json'
 import state_lngs from '../../data/state_lngs.json'
 
@@ -12,6 +13,7 @@ class INaturalist extends React.Component {
       year: '',
       place_id: '1',
       filterBy: '',
+      mapType: 'tree'
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -26,7 +28,11 @@ class INaturalist extends React.Component {
 
   handleSubmit(evt) {
     evt.preventDefault()
-    iNaturalistTreemap(this.state)
+    if (this.state.mapType === 'tree') {
+      iNaturalistTreemap(this.state)
+    } else {
+      iNatSunburstFn(this.state)
+    }
 
   }
 
@@ -112,6 +118,17 @@ class INaturalist extends React.Component {
                 <option value='10'>Oct</option>
                 <option value='11'>Nov</option>
                 <option value='12'>Dec</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label className="col-xs-5 col-form-label-sm" htmlFor="mapType">Graph Type</label>
+            <div className="col-xs-7">
+              <select className="form-control" name="mapType" onChange={this.handleChange}>
+                <option value='tree'>Treemap</option>
+                <option value='sun'>Sunburst</option>
+
               </select>
             </div>
           </div>

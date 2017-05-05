@@ -1,6 +1,5 @@
 import React from 'react'
 import stateProjection from '../../stateProjection'
-import stateProjectionAll from '../../stateProjectionAll'
 import ebird_arr from '../../data/ebird-simple.json'
 import state_lngs from '../../data/state_lngs.json'
 
@@ -44,10 +43,11 @@ class StateMap extends React.Component {
             <div className="col-xs-7">
               <select className="form-control" name="state" onChange={this.handleChange}>
                 <option value='IL'>IL</option>
-                <option value='WI'>WI</option>
-                <option value='TX'>TX</option>
-                <option value='MS'>MS</option>
                 <option value='CA'>CA</option>
+                <option value='MS'>MS</option>
+                <option value='NY'>NY</option>
+                <option value='TX'>TX</option>
+                <option value='WI'>WI</option>
                 <option value='US'>All US</option>
               </select>
             </div>
