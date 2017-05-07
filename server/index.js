@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan')
 const path = require('path')
 
 app.set('port', (process.env.PORT || 5000))
