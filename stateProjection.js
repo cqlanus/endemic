@@ -251,9 +251,9 @@ const milliToDays = ms => {
 
 const buildQuery = (options, speciesName) => {
   if (options.state === 'US') {
-    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
+    return `https://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
   } else {
-    return `http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
+    return `https://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=subnational1&r=US-${options.state}&sci=${speciesName}&back=15&maxResults=1000&locale=en_US&fmt=json&includeProvisional=true`
   }
 }
 

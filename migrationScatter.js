@@ -60,7 +60,7 @@ const migrationScatter = (options) => {
   const normalName = normalizeName(options.bird)
 
   /* Get eBird data */
-  d3.json(`http://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${normalName}&back=30&maxResults=3000&locale=en_US&fmt=json&includeProvisional=true`)
+  d3.json(`https://ebird.org/ws1.1/data/obs/region_spp/recent?rtype=country&r=US&sci=${normalName}&back=30&maxResults=3000&locale=en_US&fmt=json&includeProvisional=true`)
   .get((err, data) => {
     if (!data.length) {
         alert(`No ${options.species} found in this area!`)

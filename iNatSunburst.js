@@ -139,7 +139,7 @@ const buildTree = (nodeList, tree) => {
 
 const buildQuery = (options) => {
   const keys = Object.keys(options).filter(key => key !== 'mapType')
-  let query = 'http://api.inaturalist.org/v1/observations/species_counts?per_page=100'
+  let query = 'https://api.inaturalist.org/v1/observations/species_counts?per_page=100'
 
   keys.forEach(key => {
     if (options[key].length) {
