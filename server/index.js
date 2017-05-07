@@ -3,7 +3,8 @@ const app = express();
 const morgan = require('morgan')
 const path = require('path')
 
-// app.use('/api', require('../api/api.router'))
+app.set('port', (process.env.PORT || 5000))
+
 app.use(morgan('dev'));
 app.get('/', (req, res, next) => {
     const indexPath = path.join(__dirname, '..', 'index.html')
@@ -12,9 +13,9 @@ app.get('/', (req, res, next) => {
 
 app.use(require('./static.middleware'))
 
-app.listen(8000, (err) => {
+app.listen(app.get('port'), (err) => {
     if (err) throw err;
-    console.log('Listening on port 8000')
+    console.log('Listening on port', app.get('port'))
 })
 
 module.exports = app;
