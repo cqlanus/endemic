@@ -1,0 +1,6 @@
+{
+    "name": "endemic",
+    "description": "A tool to visualize biodiversity using D3.js",
+    "repository": "https://github.com/cqlanus/endemic",
+    "keywords": ["node", "express", "d3"]
+}
